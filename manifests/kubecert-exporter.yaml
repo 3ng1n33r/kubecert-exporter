@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kubecert-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: kubecert-exporter
+  template:
+    metadata:
+      labels:
+        app: kubecert-exporter
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: exporter
+        image: pitipiwpiwwiwwiw/kubecert-exporter:0.1
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        securityContext:
+          runAsUser: 0
+        ports:
+        - name: http
+          containerPort: 9100
+        volumeMounts:
+          - name: config
+            mountPath: /config
+          - name: pki
+            mountPath: /etc/kubernetes/pki
+            readOnly: true
+          - name: etcd-pki
+            mountPath: /etc/ssl/etcd/ssl
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: kubecert-exporter-config
+        - name: pki
+          hostPath:
+            path: /etc/kubernetes/pki
+        - name: etcd-pki
+          hostPath:
+            path: /etc/ssl/etcd/ssl

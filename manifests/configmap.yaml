@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubecert-exporter-config
+  namespace: monitoring
+data:
+  certs.yaml: |
+    certs:
+      - name: apiserver
+        path: /etc/kubernetes/pki/apiserver.crt
+        group: control-plane
+
+      - name: apiserver-kubelet-client
+        path: /etc/kubernetes/pki/apiserver-kubelet-client.crt
+        group: control-plane
+
+      - name: apiserver-etcd-client
+        path: /etc/kubernetes/pki/apiserver-etcd-client.crt
+        group: control-plane
+
+      - name: front-proxy-client
+        path: /etc/kubernetes/pki/front-proxy-client.crt
+        group: control-plane
+
+      - name: ca
+        path: /etc/kubernetes/pki/ca.crt
+        group: control-plane
+
+      - name: etcd-external-server
+        path: /etc/ssl/etcd/ssl/server.crt
+        group: etcd-external
+
+      - name: etcd-external-peer
+        path: /etc/ssl/etcd/ssl/peer.crt
+        group: etcd-external
+
+      - name: etcd-ca
+        path: /etc/ssl/etcd/ssl/ca.crt
+        group: etcd-external
