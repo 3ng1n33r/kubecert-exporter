@@ -14,11 +14,13 @@ spec:
         app: kubecert-exporter
     spec:
       nodeSelector:
+        kubernetes.io/os: linux
         node-role.kubernetes.io/control-plane: ""
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
         effect: "NoSchedule"
+      priorityClassName: "system-node-critical"
       containers:
       - name: exporter
         image: pitipiwpiwwiwwiw/kubecert-exporter:0.1
@@ -49,7 +51,7 @@ spec:
             mountPath: /etc/kubernetes/pki
             readOnly: true
           - name: etcd-pki
-            mountPath: /etc/ssl/etcd/ssl
+            mountPath: /etc/etcd/pki
             readOnly: true
       volumes:
         - name: config
@@ -60,4 +62,4 @@ spec:
             path: /etc/kubernetes/pki
         - name: etcd-pki
           hostPath:
-            path: /etc/ssl/etcd/ssl
+            path: /etc/etcd/pki

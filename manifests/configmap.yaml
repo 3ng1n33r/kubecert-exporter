@@ -28,13 +28,13 @@ data:
         group: control-plane
 
       - name: etcd-external-server
-        path: /etc/ssl/etcd/ssl/server.crt
+        path: /etc/etcd/pki/server.crt
         group: etcd-external
 
       - name: etcd-external-peer
-        path: /etc/ssl/etcd/ssl/peer.crt
+        path: /etc/etcd/pki/peer.crt
         group: etcd-external
 
       - name: etcd-ca
-        path: /etc/ssl/etcd/ssl/ca.crt
+        path: /etc/etcd/pki/ca.crt
         group: etcd-external
